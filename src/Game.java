@@ -15,7 +15,9 @@ class Game {
                 break;
             }
             String[] words = gameMode.split(" ");
-            if (words[1].equals("user") && words[2].equals("user")) {
+            if (words.length < 3) {
+                System.out.println("Bad parameters!");
+            } else if (words[1].equals("user") && words[2].equals("user")) {
                 field.createTheField();
                 field.showField();
                 while (gameResult()) {
@@ -51,7 +53,8 @@ class Game {
                     player2.makeMove(false, field.field);
                     field.showField();
                 }
-            } else {
+            } else if ((words[1].equals("easy") || words[1].equals("medium")) &&
+                       (words[2].equals("easy") || words[2].equals("medium"))) {
                 field.createTheField();
                 field.showField();
                 while (gameResult()) {
@@ -63,6 +66,8 @@ class Game {
                     player2.aiMove(words[2], false, field.field);
                     field.showField();
                 }
+            } else {
+                System.out.println("Bad parameters!");
             }
         }
     }

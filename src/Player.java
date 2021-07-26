@@ -151,12 +151,12 @@ public class Player {
                 temp++;
             }
             if (temp == 2) {
+                y1 = 1;
                 for (int z = 3; z > 0; z--) {
                     if (field[y1][z].equals(" ")) {
                         field[y1][z] = pick;
                         check = true;
                     }
-                    y1++;
                 }
             }
             y1--;
@@ -231,6 +231,7 @@ public class Player {
                     temp++;
                 }
                 if (temp == 2) {
+                    y1 = 1;
                     for (int z = 3; z > 0; z--) {
                         if (field[y1][z].equals(" ")) {
                             field[y1][z] = pick;

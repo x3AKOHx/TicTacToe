@@ -237,8 +237,10 @@ public class Player {
                             field[y1][z] = pick;
                             check2 = true;
                         }
+                        y1++;
                     }
                 }
+                y1--;
             }
         }
         if (!check && !check2) {

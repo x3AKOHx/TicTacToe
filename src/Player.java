@@ -2,6 +2,9 @@ import java.util.Scanner;
 
 public class Player {
 
+    int tempX = 0;
+    int tempY = 0;
+
     public void makeMove(boolean startFirst, String[][] field) {
 
         String pick;
@@ -14,7 +17,7 @@ public class Player {
         int x;
         int y;
         while (isTrue) {
-            System.out.println("Enter the coordinates: ");
+            System.out.println("Enter the coordinates (\"x y\" form): ");
             Scanner sc = new Scanner(System.in);
             String line = sc.nextLine();
             char[] ch = line.toCharArray();
@@ -36,11 +39,14 @@ public class Player {
     }
 
     public void aiMove(String level, boolean startFirst, String[][] field) {
-        if (level.equals("easy")) {
+        if (level.equals("2")) {
             aiEasyMove(startFirst, true, field);
         }
-        if (level.equals("medium")) {
+        if (level.equals("3")) {
             aiMediumMove(startFirst, field);
+        }
+        if (level.equals("4")) {
+            aiHardMove(startFirst, field);
         }
     }
 
@@ -151,12 +157,13 @@ public class Player {
                 temp++;
             }
             if (temp == 2) {
-                y1 = 1;
-                for (int z = 3; z > 0; z--) {
-                    if (field[y1][z].equals(" ")) {
-                        field[y1][z] = pick;
+                int y3 = 3;
+                for (int z = 1; z < 4; z++) {
+                    if (field[z][y3].equals(" ")) {
+                        field[z][y3] = pick;
                         check = true;
                     }
+                    y3--;
                 }
             }
             y1--;
@@ -231,13 +238,13 @@ public class Player {
                     temp++;
                 }
                 if (temp == 2) {
-                    y1 = 1;
-                    for (int z = 3; z > 0; z--) {
-                        if (field[y1][z].equals(" ")) {
-                            field[y1][z] = pick;
+                    int y2 = 3;
+                    for (int z = 1; z < 4; z++) {
+                        if (field[z][y2].equals(" ")) {
+                            field[z][y2] = pick;
                             check2 = true;
                         }
-                        y1++;
+                        y2--;
                     }
                 }
                 y1--;
@@ -246,5 +253,90 @@ public class Player {
         if (!check && !check2) {
             aiEasyMove(startFirst, false, field);
         }
+    }
+
+    public void aiHardMove(boolean startFirst, String[][] field) {
+
+        String pick;
+
+        if (startFirst) {
+            pick = "X";
+        } else {
+            pick = "O";
+        }
+        System.out.println("Making move level \"hard\"");
+
+        miniMax(startFirst, field, 0);
+        field[tempX][tempY] = pick;
+    }
+
+    public int miniMax(boolean maximazing, String[][] field, int count) {
+        int value;
+        int temp = 0;
+        int check = 0;
+
+        String pick;
+        if (maximazing) {
+            pick = "X";
+        } else {
+            pick = "O";
+        }
+        for (int x = 1; x < 4; x++) {
+            for (int y = 1; y < 4; y++) {
+                if (field[x][y].equals(" ")) {
+                    field[x][y] = pick;
+                    if (Game.xWin()) {
+                        value = 1;
+                    } else if (Game.oWin()) {
+                        value = -1;
+                    } else if (Game.draw()) {
+                        value = 0;
+                    } else {
+                        value = miniMax(!maximazing, field, count + 1);
+                    }
+                    field[x][y] = " ";
+                    if (maximazing) {
+                        if (value > temp) {
+                            temp = value;
+                            check++;
+                            if (count == 0) {
+                                tempX = x;
+                                tempY = y;
+                            }
+                        } else if (value == temp) {
+                            temp = value;
+                            check++;
+                            if (count == 0) {
+                                tempX = x;
+                                tempY = y;
+                            }
+                        }
+                    } else {
+                        if (value < temp) {
+                            temp = value;
+                            check++;
+                            if (count == 0) {
+                                tempX = x;
+                                tempY = y;
+                            }
+                        } else if (value == temp) {
+                            temp = value;
+                            check++;
+                            if (count == 0) {
+                                tempX = x;
+                                tempY = y;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (maximazing && check == 0){
+            temp = -1;
+        }
+        if (!maximazing && check == 0){
+            temp = 1;
+        }
+        return temp;
     }
 }

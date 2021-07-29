@@ -1,5 +1,6 @@
 public class Field {
     String[][] field = new String[5][5];
+
     public void createTheField() {
 
         for(int i = 0; i < 4; i++) {
